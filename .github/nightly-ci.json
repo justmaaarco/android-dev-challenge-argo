@@ -1,0 +1,18 @@
+{
+  "branch": "main",
+  "baseline_sha": "acc5a633d5e72b6370fb2f04db06e36c1689818a",
+  "monthly_budget_minutes": null,
+  "migration_blobs": {
+    ".github/workflows/Check.yaml": "edd2a33fe2087c5f64520d75f5319e12e81debf7"
+  },
+  "workflows": [
+    {
+      "file": "Check.yaml",
+      "reserve_minutes": 775,
+      "ignore": [
+        "docs/**",
+        "**/*.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+name: Nightly change-only CI
+on:
+  schedule:
+    - cron: 11 3 * * *
+      timezone: Europe/London
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: nightly-ci-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+      - name: Verify change detection and budget admission
+        run: node --test .github/scripts/nightly-ci.test.cjs
+      - name: Dispatch only changed CI within the monthly budget
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
+        with:
+          script: |
+            const config = require('./.github/nightly-ci.json');
+            const {run} = require('./.github/scripts/nightly-ci.cjs');
+            await run({github, context, core, config});
